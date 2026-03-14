@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>OilWords</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --bg:#0B0B0F;
+  --s1:#131318;
+  --s2:#1A1A22;
+  --s3:#22222D;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --gold:#E8981E;
+  --gold-d:#C07A0E;
+  --gold-bg:rgba(232,152,30,.1);
+  --gold-bg2:rgba(232,152,30,.18);
+  --green:#22C55E;
+  --green-bg:rgba(34,197,94,.1);
+  --red:#F43F5E;
+  --red-bg:rgba(244,63,94,.1);
+  --blue:#3B82F6;
+  --blue-bg:rgba(59,130,246,.12);
+  --t1:#EEEAE0;
+  --t2:#8A8A9E;
+  --t3:#55556A;
+  --sb:env(safe-area-inset-bottom,0px);
+  --st:env(safe-area-inset-top,0px);
+  --r:16px;
+  --sh:0 0 0 1px rgba(255,255,255,.06),0 4px 24px rgba(0,0,0,.4);
+  --sh-gold:0 0 0 1px rgba(232,152,30,.2),0 4px 32px rgba(232,152,30,.12);
+}
+
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--t1)}
+.app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative}
+.screen{display:none;flex-direction:column;height:100%}
+.screen.active{display:flex}
+
+/* ── NOISE OVERLAY ── */
+.app::before{content:'';position:fixed;inset:0;max-width:430px;margin:0 auto;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.5}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:0}
+
+/* ── NAV ── */
+.nav{background:rgba(11,11,15,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:calc(var(--st)+12px) 18px 12px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;z-index:10}
+.nav-back{background:none;border:none;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;padding:6px 0;display:flex;align-items:center;gap:4px;letter-spacing:-.2px}
+.nav-back:active{opacity:.5}
+.nav-back::before{content:'←';font-size:16px}
+.nav-title{flex:1;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t1)}
+.nav-right{min-width:56px;text-align:right;font-family:'DM Mono',monospace;font-size:12px;color:var(--t2);letter-spacing:.5px}
+
+/* ── PROGRESS ── */
+.prog-track{height:2px;background:var(--s3);flex-shrink:0;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width .5s cubic-bezier(.4,0,.2,1);position:relative}
+.prog-fill::after{content:'';position:absolute;right:0;top:-2px;width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+/* ── HOME ── */
+.home-header{background:var(--s1);border-bottom:1px solid var(--border);padding:calc(var(--st)+20px) 20px 20px;flex-shrink:0;position:relative;overflow:hidden}
+.home-header::before{content:'';position:absolute;top:-40px;right:-20px;width:200px;height:200px;background:radial-gradient(circle,rgba(232,152,30,.15),transparent 70%);pointer-events:none}
+.home-logo{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.home-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--gold-d),var(--gold));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 16px rgba(232,152,30,.3),inset 0 1px 0 rgba(255,255,255,.2)}
+.home-h1{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;background:linear-gradient(135deg,var(--t1) 60%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-sub{font-size:13px;color:var(--t2);font-weight:500;letter-spacing:.2px}
+.home-stats{display:flex;gap:12px;margin-top:16px}
+.stat-pill{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;display:flex;flex-direction:column;align-items:center;flex:1}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.stat-l{font-size:10px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+
+.scroll{flex:1;overflow-y:auto;padding:20px;-webkit-overflow-scrolling:touch}
+.section-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin:0 0 10px 2px}
+.mode-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+
+.mode-row{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;width:100%;text-align:left;color:var(--t1);font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;transition:border-color .2s,transform .1s,box-shadow .2s}
+.mode-row:active{transform:scale(.98);border-color:var(--border2)}
+.mode-row::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.mode-row.gold-row{border-color:rgba(232,152,30,.25);box-shadow:0 0 0 0 rgba(232,152,30,.15)}
+
+.m-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;position:relative}
+.m-tx{flex:1}
+.m-nm{font-size:16px;font-weight:700;letter-spacing:-.2px}
+.m-ds{font-size:12px;color:var(--t2);margin-top:2px;font-weight:400}
+.m-arr{width:28px;height:28px;background:var(--s3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:14px;flex-shrink:0}
+
+/* ── EX BODY ── */
+.ex-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+
+/* ── QUESTION CARD ── */
+.q-card{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:24px 20px 20px;text-align:center;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;overflow:hidden}
+.q-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.q-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3)}
+.q-word{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:700;letter-spacing:.5px;line-height:1.1;color:var(--t1)}
+.q-tr{font-family:'DM Mono',monospace;font-size:12px;color:var(--t2);font-weight:400;letter-spacing:.5px;background:var(--s3);padding:3px 10px;border-radius:20px}
+
+/* ── SPEAK BUTTON ── */
+.speak-btn{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:7px 16px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .2s;letter-spacing:-.1px}
+.speak-btn:active{opacity:.6;transform:scale(.97)}
+.speak-btn.speaking{background:var(--gold);color:#000;border-color:transparent;box-shadow:0 4px 16px rgba(232,152,30,.3)}
+.speak-btn svg{width:14px;height:14px;flex-shrink:0}
+.sound-dots{display:flex;align-items:center;gap:2px;display:none}
+.speak-btn.speaking .sound-dots{display:flex}
+.speak-btn.speaking .speak-txt{display:none}
+.sd{width:3px;border-radius:2px;background:currentColor;animation:sd .7s ease-in-out infinite}
+.sd:nth-child(1){height:6px;animation-delay:0s}
+.sd:nth-child(2){height:10px;animation-delay:.1s}
+.sd:nth-child(3){height:14px;animation-delay:.2s}
+.sd:nth-child(4){height:10px;animation-delay:.3s}
+.sd:nth-child(5){height:6px;animation-delay:.4s}
+@keyframes sd{0%,100%{transform:scaleY(.5);opacity:.5}50%{transform:scaleY(1);opacity:1}}
+
+/* ── OPTIONS ── */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:15px 18px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--t1);cursor:pointer;text-align:left;line-height:1.3;transition:all .15s;position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.opt:active:not(:disabled){transform:scale(.99);background:var(--s2)}
+.opt.sel{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
+.opt.ok{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.opt.bad{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+
+/* ── INPUT ── */
+.tp-inp{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:16px 18px;font-size:16px;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--t1);width:100%;outline:none;transition:all .2s;caret-color:var(--gold)}
+.tp-inp::placeholder{color:var(--t3);font-weight:400}
+.tp-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,152,30,.1)}
+.tp-inp.ok{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.1)}
+.tp-inp.bad{border-color:var(--red);box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+
+/* ── FEEDBACK ── */
+.fb{border-radius:14px;padding:14px 16px;display:none;align-items:flex-start;gap:12px;border:1px solid transparent}
+.fb.ok{display:flex;background:var(--green-bg);border-color:rgba(34,197,94,.2)}
+.fb.bad{display:flex;background:var(--red-bg);border-color:rgba(244,63,94,.2)}
+.fb-ic{font-size:20px;flex-shrink:0;margin-top:0}
+.fb-main{font-size:15px;font-weight:700}
+.fb-main.ok{color:var(--green)}
+.fb-main.bad{color:var(--red)}
+.fb-sub{font-size:13px;color:var(--t2);margin-top:3px;font-weight:500}
+.fb-ans{font-size:14px;font-weight:700;color:var(--t1);margin-top:3px}
+.fb-speak{background:none;border:none;color:var(--gold);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;padding:5px 0 0;display:inline-flex;align-items:center;gap:4px}
+.fb-speak:active{opacity:.6}
+
+/* ── BOTTOM BAR ── */
+.bbar{padding:12px 18px calc(var(--sb)+12px);background:rgba(11,11,15,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);flex-shrink:0}
+.mbtn{width:100%;padding:16px;border-radius:14px;border:none;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:-.2px;transition:all .2s;position:relative;overflow:hidden}
+.mbtn:active:not(.off){transform:scale(.99)}
+.mbtn.prim{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:#0B0B0F;box-shadow:0 4px 20px rgba(232,152,30,.25)}
+.mbtn.succ{background:linear-gradient(135deg,#16A34A,var(--green));color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.2)}
+.mbtn.off{background:var(--s2);color:var(--t3);pointer-events:none;border:1px solid var(--border)}
+
+/* ── FLASHCARD ── */
+.fc-scene{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;perspective:1000px}
+.fc-card{width:100%;max-width:380px;height:240px;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,.1,.2,1);cursor:pointer}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:22px;box-shadow:var(--sh);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:8px;text-align:center}
+.fc-face.front{background:var(--s1);border:1px solid var(--border)}
+.fc-face.front::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:1px}
+.fc-face.back{transform:rotateY(180deg);background:linear-gradient(135deg,#1A1510,#221C0E);border:1px solid rgba(232,152,30,.2)}
+.fc-face.back::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(232,152,30,.08),transparent 60%);border-radius:22px}
+.fc-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3)}
+.fc-face.back .fc-lang{color:rgba(232,152,30,.5)}
+.fc-w{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:700;letter-spacing:.5px;line-height:1.2}
+.fc-face.back .fc-w{color:var(--gold)}
+.fc-t{font-family:'DM Mono',monospace;font-size:12px;color:var(--t2);background:var(--s3);padding:3px 10px;border-radius:20px}
+.fc-face.back .fc-t{color:rgba(232,152,30,.6);background:rgba(232,152,30,.08)}
+.fc-hint-txt{font-size:11px;color:var(--t3);margin-top:4px;display:flex;align-items:center;gap:4px}
+.fc-hint-txt::before{content:'↕';font-size:14px}
+.fc-speak-bar{flex-shrink:0;background:var(--s1);border-top:1px solid var(--border);padding:10px 18px;display:flex;justify-content:center}
+.fc-acts{padding:12px 18px calc(var(--sb)+12px);display:flex;gap:10px;background:rgba(11,11,15,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);flex-shrink:0}
+.fc-btn{flex:1;padding:16px;border-radius:14px;border:none;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s}
+.fc-btn:active{transform:scale(.98)}
+.fc-btn.no{background:var(--red-bg);color:var(--red);border:1px solid rgba(244,63,94,.2)}
+.fc-btn.yes{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+
+/* ── MATCH ── */
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mi-item{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:12px 10px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:center;min-height:58px;display:flex;align-items:center;justify-content:center;line-height:1.3;transition:all .15s;color:var(--t1)}
+.mi-item:active:not(.done){transform:scale(.97)}
+.mi-item.sel{border-color:var(--gold);background:var(--gold-bg);color:var(--gold)}
+.mi-item.done{border-color:rgba(34,197,94,.3);background:var(--green-bg);color:var(--green);opacity:.5;pointer-events:none}
+.mi-item.err{border-color:var(--red);background:var(--red-bg);color:var(--red);animation:shake .32s cubic-bezier(.4,0,.2,1)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── WORD LIST ── */
+.wl-bar{background:var(--s1);border-bottom:1px solid var(--border);padding:12px 18px;flex-shrink:0}
+.wl-search-wrap{background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:9px 14px;display:flex;align-items:center;gap:8px}
+.wl-search-ic{font-size:14px;color:var(--t3)}
+.wl-inp{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--t1);flex:1;outline:none;font-weight:500}
+.wl-inp::placeholder{color:var(--t3)}
+.wl-scroll{flex:1;overflow-y:auto;padding:12px 18px 20px;-webkit-overflow-scrolling:touch}
+.wl-item{background:var(--s1);border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
+.wl-item:active{border-color:var(--border2)}
+.wl-left{flex:1;min-width:0}
+.wl-en{font-size:15px;font-weight:700;color:var(--t1)}
+.wl-tr{font-family:'DM Mono',monospace;font-size:11px;color:var(--t2);margin-top:2px;letter-spacing:.3px}
+.wl-div{width:1px;background:var(--s3);height:28px;flex-shrink:0}
+.wl-ru{font-size:13px;color:var(--t2);font-weight:500;text-align:right;max-width:110px;line-height:1.3}
+.wl-sp{background:var(--s2);border:1px solid var(--border);border-radius:9px;color:var(--gold);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;transition:all .15s}
+.wl-sp:active{opacity:.6;transform:scale(.92)}
+
+/* ── RESULTS ── */
+.res-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center;position:relative;overflow:hidden}
+.res-body::before{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(232,152,30,.06),transparent 70%);pointer-events:none}
+.res-em{font-size:72px;margin-bottom:8px;animation:emIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes emIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.res-t{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--t1),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.res-s{font-size:14px;color:var(--t2);margin-top:4px;font-weight:500}
+.res-cards{display:flex;gap:10px;margin-top:24px;width:100%}
+.res-card{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:16px 8px}
+.res-n{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;line-height:1}
+.res-l{font-size:10px;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.res-n.g{color:var(--green)}
+.res-n.r{color:var(--red)}
+.res-n.b{color:var(--gold)}
+.res-accuracy-ring{margin:20px auto 0;position:relative;width:110px;height:110px}
+.res-accuracy-ring svg{transform:rotate(-90deg)}
+.res-accuracy-ring circle{transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ring-num{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--gold);line-height:1}
+.ring-lbl{font-size:10px;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.res-bot{padding:12px 18px calc(var(--sb)+12px);background:rgba(11,11,15,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;gap:10px}
+.rbtn{flex:1;padding:16px;border-radius:14px;border:none;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s}
+.rbtn:active{transform:scale(.98)}
+.rbtn.prim{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:#0B0B0F;box-shadow:0 4px 20px rgba(232,152,30,.25)}
+.rbtn.ghost{background:var(--s2);color:var(--t1);border:1px solid var(--border)}
+
+/* ── BADGE ── */
+.mode-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 8px;border-radius:6px;flex-shrink:0}
+.badge-new{background:rgba(232,152,30,.15);color:var(--gold);border:1px solid rgba(232,152,30,.25)}
+
+/* ── STREAK CHIP ── */
+.streak-chip{background:var(--gold-bg2);border:1px solid rgba(232,152,30,.3);border-radius:10px;padding:5px 12px;display:inline-flex;align-items:center;gap:5px;margin-top:12px}
+.streak-chip .sc-n{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold)}
+.streak-chip .sc-l{font-size:11px;color:rgba(232,152,30,.7);font-weight:600}
+
+/* ── CONFETTI ── */
+.cwrap{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.cp{position:absolute;border-radius:2px;animation:cf linear forwards}
+@keyframes cf{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(600deg);opacity:0}}
+
+/* ── ENTER ANIMATIONS ── */
+.q-card,.opts,.fb{animation:fadeUp .3s cubic-bezier(.4,0,.2,1)}
+@keyframes fadeUp{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <div id="s-home" class="screen active">
+    <div class="home-header">
+      <div class="home-logo">
+        <div class="home-logo-icon">⛽</div>
+        <div class="home-h1">OilWords</div>
+      </div>
+      <div class="home-sub">Профессиональная лексика нефтяной отрасли</div>
+      <div class="home-stats">
+        <div class="stat-pill"><div class="stat-n">55</div><div class="stat-l">Слов</div></div>
+        <div class="stat-pill"><div class="stat-n">5</div><div class="stat-l">Режимов</div></div>
+        <div class="stat-pill"><div class="stat-n" id="hs-acc">—</div><div class="stat-l">Лучший %</div></div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="section-lbl" style="margin-top:4px">Режимы обучения</div>
+      <div class="mode-list">
+        <button class="mode-row" onclick="startMode('flashcard')">
+          <div class="m-ic" style="background:rgba(59,130,246,.1)">🃏</div>
+          <div class="m-tx"><div class="m-nm">Карточки</div><div class="m-ds">Просмотр и запоминание</div></div>
+          <div class="m-arr">›</div>
+        </button>
+        <button class="mode-row" onclick="startMode('multiple')">
+          <div class="m-ic" style="background:rgba(34,197,94,.1)">🎯</div>
+          <div class="m-tx"><div class="m-nm">Выбор ответа</div><div class="m-ds">4 варианта перевода</div></div>
+          <div class="m-arr">›</div>
+        </button>
+        <button class="mode-row" onclick="startMode('typing')">
+          <div class="m-ic" style="background:rgba(232,152,30,.1)">⌨️</div>
+          <div class="m-tx"><div class="m-nm">Написать</div><div class="m-ds">Введи перевод на русском</div></div>
+          <div class="m-arr">›</div>
+        </button>
+        <button class="mode-row" onclick="startMode('reverse')">
+          <div class="m-ic" style="background:rgba(168,85,247,.1)">🔄</div>
+          <div class="m-tx"><div class="m-nm">Угадай слово</div><div class="m-ds">Русский → English</div></div>
+          <div class="m-arr">›</div>
+        </button>
+        <button class="mode-row" onclick="startMode('matching')">
+          <div class="m-ic" style="background:rgba(244,63,94,.1)">🔗</div>
+          <div class="m-tx"><div class="m-nm">Сопоставить</div><div class="m-ds">Найди пары слов</div></div>
+          <span class="mode-badge badge-new">Hot</span>
+          <div class="m-arr">›</div>
+        </button>
+      </div>
+      <div class="section-lbl">Справочник</div>
+      <div class="mode-list">
+        <button class="mode-row gold-row" onclick="showWL()">
+          <div class="m-ic" style="background:rgba(232,152,30,.12)">📖</div>
+          <div class="m-tx"><div class="m-nm">Словарь</div><div class="m-ds">Все 55 слов с транскрипцией</div></div>
+          <div class="m-arr" style="color:var(--gold)">›</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASHCARD -->
+  <div id="s-flashcard" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Карточки</div>
+      <div class="nav-right" id="fc-ctr">1/55</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="fc-p" style="width:0%"></div></div>
+    <div class="fc-scene" onclick="flipFC()">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-face front">
+          <div class="fc-lang">English</div>
+          <div class="fc-w" id="fc-en">—</div>
+          <div class="fc-t" id="fc-tr">—</div>
+          <div class="fc-hint-txt">Нажми, чтобы перевернуть</div>
+        </div>
+        <div class="fc-face back">
+          <div class="fc-lang">Русский</div>
+          <div class="fc-w" id="fc-ru">—</div>
+          <div class="fc-t" id="fc-en2">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-speak-bar">
+      <button class="speak-btn" id="fc-sp" onclick="event.stopPropagation();speakCurrent()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <span class="speak-txt">Прослушать</span>
+        <span class="sound-dots"><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span></span>
+      </button>
+    </div>
+    <div class="fc-acts">
+      <button class="fc-btn no" onclick="fcAns(false)">✕ Не знаю</button>
+      <button class="fc-btn yes" onclick="fcAns(true)">✓ Знаю</button>
+    </div>
+  </div>
+
+  <!-- MULTIPLE -->
+  <div id="s-multiple" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Выбор ответа</div>
+      <div class="nav-right" id="mc-ctr"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="mc-p" style="width:0%"></div></div>
+    <div class="ex-body">
+      <div class="q-card">
+        <div class="q-lbl">Переведи слово</div>
+        <div class="q-word" id="mc-w">—</div>
+        <div class="q-tr" id="mc-t">—</div>
+        <button class="speak-btn" id="mc-sp" onclick="speakCurrent()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <span class="speak-txt">Прослушать</span>
+          <span class="sound-dots"><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span></span>
+        </button>
+      </div>
+      <div class="opts" id="mc-opts"></div>
+      <div class="fb" id="mc-fb">
+        <div class="fb-ic" id="mc-fi"></div>
+        <div style="flex:1">
+          <div class="fb-main" id="mc-fm"></div>
+          <div class="fb-ans" id="mc-fa" style="display:none"></div>
+          <div class="fb-sub" id="mc-fs"></div>
+          <button class="fb-speak" id="mc-fbsp" style="display:none" onclick="speakWord(G.queue[G.idx].en)">🔊 Прослушать ещё раз</button>
+        </div>
+      </div>
+    </div>
+    <div class="bbar"><button class="mbtn off" id="mc-btn" onclick="mcAct()">Проверить</button></div>
+  </div>
+
+  <!-- TYPING -->
+  <div id="s-typing" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Написать</div>
+      <div class="nav-right" id="tp-ctr"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="tp-p" style="width:0%"></div></div>
+    <div class="ex-body">
+      <div class="q-card">
+        <div class="q-lbl">Введи перевод на русский</div>
+        <div class="q-word" id="tp-w">—</div>
+        <div class="q-tr" id="tp-t">—</div>
+        <button class="speak-btn" id="tp-sp" onclick="speakCurrent()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <span class="speak-txt">Прослушать</span>
+          <span class="sound-dots"><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span><span class="sd"></span></span>
+        </button>
+      </div>
+      <input class="tp-inp" id="tp-in" placeholder="Перевод на русском..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')tpAct()" oninput="tpTyp()">
+      <div class="fb" id="tp-fb">
+        <div class="fb-ic" id="tp-fi"></div>
+        <div style="flex:1">
+          <div class="fb-main" id="tp-fm"></div>
+          <div class="fb-ans" id="tp-fa" style="display:none"></div>
+          <div class="fb-sub" id="tp-fs"></div>
+          <button class="fb-speak" id="tp-fbsp" style="display:none" onclick="speakWord(G.queue[G.idx].en)">🔊 Прослушать ещё раз</button>
+        </div>
+      </div>
+    </div>
+    <div class="bbar"><button class="mbtn off" id="tp-btn" onclick="tpAct()">Проверить</button></div>
+  </div>
+
+  <!-- REVERSE -->
+  <div id="s-reverse" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Угадай слово</div>
+      <div class="nav-right" id="rv-ctr"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="rv-p" style="width:0%"></div></div>
+    <div class="ex-body">
+      <div class="q-card">
+        <div class="q-lbl">Выбери английский вариант</div>
+        <div class="q-word" id="rv-w">—</div>
+      </div>
+      <div class="opts" id="rv-opts"></div>
+      <div class="fb" id="rv-fb">
+        <div class="fb-ic" id="rv-fi"></div>
+        <div style="flex:1">
+          <div class="fb-main" id="rv-fm"></div>
+          <div class="fb-ans" id="rv-fa" style="display:none"></div>
+          <div class="fb-sub" id="rv-fs"></div>
+          <button class="fb-speak" id="rv-fbsp" style="display:none" onclick="speakWord(G.queue[G.idx].en)">🔊 Прослушать слово</button>
+        </div>
+      </div>
+    </div>
+    <div class="bbar"><button class="mbtn off" id="rv-btn" onclick="rvAct()">Проверить</button></div>
+  </div>
+
+  <!-- MATCHING -->
+  <div id="s-matching" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Сопоставить</div>
+      <div class="nav-right" id="mt-ctr"></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="mt-p" style="width:0%"></div></div>
+    <div class="ex-body">
+      <div class="q-card" style="padding:16px 18px">
+        <div class="q-lbl" style="margin-bottom:0">Соедини слово с переводом</div>
+      </div>
+      <div class="mg" id="mt-grid"></div>
+      <div class="fb" id="mt-fb">
+        <div class="fb-ic" id="mt-fi"></div>
+        <div><div class="fb-main" id="mt-fm"></div><div class="fb-sub" id="mt-fs"></div></div>
+      </div>
+    </div>
+    <div class="bbar"><button class="mbtn prim" id="mt-btn" onclick="mtNext()" style="display:none">Следующий раунд →</button></div>
+  </div>
+
+  <!-- WORD LIST -->
+  <div id="s-wordlist" class="screen">
+    <div class="nav">
+      <button class="nav-back" onclick="goHome()">Назад</button>
+      <div class="nav-title">Словарь</div>
+      <div class="nav-right" id="wl-count">55</div>
+    </div>
+    <div class="wl-bar">
+      <div class="wl-search-wrap">
+        <span class="wl-search-ic">🔍</span>
+        <input class="wl-inp" placeholder="Поиск слова..." oninput="filterWL(this.value)" autocorrect="off" spellcheck="false">
+      </div>
+    </div>
+    <div class="wl-scroll" id="wl-list"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="s-results" class="screen">
+    <div class="res-body">
+      <div class="res-em" id="re-em">🏆</div>
+      <div class="res-t" id="re-t">Отлично!</div>
+      <div class="res-s" id="re-s">Упражнение завершено</div>
+      <div class="res-accuracy-ring">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="10"/>
+          <circle id="ring-circle" cx="55" cy="55" r="46" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="289" stroke-dashoffset="289" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+        </svg>
+        <div class="ring-pct">
+          <div class="ring-num" id="re-acc-ring">0%</div>
+          <div class="ring-lbl">Точность</div>
+        </div>
+      </div>
+      <div class="res-cards">
+        <div class="res-card"><div class="res-n g" id="re-ok">0</div><div class="res-l">Верно</div></div>
+        <div class="res-card"><div class="res-n r" id="re-bad">0</div><div class="res-l">Ошибки</div></div>
+        <div class="res-card"><div class="res-n b" id="re-total">0</div><div class="res-l">Всего</div></div>
+      </div>
+    </div>
+    <div class="res-bot">
+      <button class="rbtn ghost" onclick="goHome()">На главную</button>
+      <button class="rbtn prim" onclick="retry()">Ещё раз</button>
+    </div>
+  </div>
+</div>
+
+<div class="cwrap" id="cw"></div>
+
+<script>
+const WORDS=[
+  {en:"fuel",tr:"/fjuːəl/",ru:"топливо"},
+  {en:"to fuel",tr:"/tə fjuːəl/",ru:"снабжать топливом"},
+  {en:"offshore field",tr:"/ˌɒfˈʃɔː fiːld/",ru:"морское месторождение"},
+  {en:"oil field",tr:"/ɔɪl fiːld/",ru:"нефтяное месторождение"},
+  {en:"oil refinery",tr:"/ɔɪl rɪˈfaɪnəri/",ru:"нефтеперерабатывающий завод"},
+  {en:"oil well",tr:"/ɔɪl wel/",ru:"нефтяная скважина"},
+  {en:"petrol station",tr:"/ˈpetrəl ˈsteɪʃən/",ru:"автозаправочная станция"},
+  {en:"pipeline",tr:"/ˈpaɪplaɪn/",ru:"трубопровод"},
+  {en:"drilling rig",tr:"/ˈdrɪlɪŋ rɪɡ/",ru:"буровая установка"},
+  {en:"assets",tr:"/ˈæsets/",ru:"активы"},
+  {en:"brown field",tr:"/braʊn fiːld/",ru:"зрелое месторождение"},
+  {en:"to compete",tr:"/tə kəmˈpiːt/",ru:"конкурировать"},
+  {en:"to explore",tr:"/tə ɪkˈsplɔː/",ru:"вести геологоразведку"},
+  {en:"facility",tr:"/fəˈsɪləti/",ru:"объект"},
+  {en:"gasoline",tr:"/ˈɡæsəliːn/",ru:"бензин"},
+  {en:"green field",tr:"/ɡriːn fiːld/",ru:"новое месторождение"},
+  {en:"hydrocarbon",tr:"/ˌhaɪdrəˈkɑːbən/",ru:"углеводород"},
+  {en:"to operate",tr:"/tə ˈɒpəreɪt/",ru:"управлять чем-то"},
+  {en:"parent company",tr:"/ˈpeərənt ˈkʌmpəni/",ru:"материнская компания"},
+  {en:"probable reserves",tr:"/ˈprɒbəbl rɪˈzɜːvz/",ru:"вероятные запасы"},
+  {en:"proven reserves",tr:"/ˈpruːvən rɪˈzɜːvz/",ru:"доказанные запасы"},
+  {en:"to refine",tr:"/tə rɪˈfaɪn/",ru:"перерабатывать нефть"},
+  {en:"subsidiary",tr:"/səbˈsɪdiəri/",ru:"дочерняя компания"},
+  {en:"to tap",tr:"/tə tæp/",ru:"осваивать"},
+  {en:"adhesive",tr:"/ədˈhiːsɪv/",ru:"клеящее вещество"},
+  {en:"alternative energy",tr:"/ɔːlˈtɜːnətɪv ˈenədʒi/",ru:"альтернативная энергия"},
+  {en:"biofuel",tr:"/ˈbaɪəʊˌfjuːəl/",ru:"биотопливо"},
+  {en:"demand",tr:"/dɪˈmɑːnd/",ru:"спрос"},
+  {en:"to develop a field",tr:"/tə dɪˈveləp/",ru:"разрабатывать месторождение"},
+  {en:"downstream",tr:"/ˌdaʊnˈstriːm/",ru:"последние стадии добычи"},
+  {en:"to extract",tr:"/tə ɪkˈstrækt/",ru:"добывать"},
+  {en:"headquarters",tr:"/ˌhedˈkwɔːtəz/",ru:"штаб-квартира"},
+  {en:"to invest",tr:"/tə ɪnˈvest/",ru:"инвестировать"},
+  {en:"lubricant",tr:"/ˈluːbrɪkənt/",ru:"смазочный материал"},
+  {en:"natural gas",tr:"/ˈnætʃrəl ɡæs/",ru:"природный газ"},
+  {en:"petrochemicals",tr:"/ˌpetrəʊˈkemɪkəlz/",ru:"нефтехимикаты"},
+  {en:"to process",tr:"/tə ˈprəʊses/",ru:"перерабатывать"},
+  {en:"renewable energy",tr:"/rɪˈnjuːəbl ˈenədʒi/",ru:"возобновляемая энергия"},
+  {en:"site",tr:"/saɪt/",ru:"площадка"},
+  {en:"supply",tr:"/səˈplaɪ/",ru:"запас"},
+  {en:"tanker",tr:"/ˈtæŋkə/",ru:"танкер"},
+  {en:"upstream",tr:"/ˌʌpˈstriːm/",ru:"ранние стадии добычи"},
+  {en:"wind farm",tr:"/wɪnd fɑːm/",ru:"ветроэлектростанция"},
+  {en:"concession",tr:"/kənˈseʃən/",ru:"концессия"},
+  {en:"to be engaged in",tr:"/tə biː ɪnˈɡeɪdʒd/",ru:"заниматься чем-л."},
+  {en:"cutting-edge",tr:"/ˈkʌtɪŋ edʒ/",ru:"передовой"},
+  {en:"in terms of",tr:"/ɪn tɜːmz əv/",ru:"с точки зрения"},
+  {en:"to provide",tr:"/tə prəˈvaɪd/",ru:"обеспечивать"},
+  {en:"to be keen on",tr:"/tə biː kiːn ɒn/",ru:"очень хотеть"},
+  {en:"to benefit from",tr:"/tə ˈbenɪfɪt/",ru:"получать пользу"},
+  {en:"to cope with",tr:"/tə kəʊp wɪð/",ru:"справляться"},
+  {en:"to depend on",tr:"/tə dɪˈpend ɒn/",ru:"зависеть от"},
+  {en:"sophisticated",tr:"/səˈfɪstɪkeɪtɪd/",ru:"сложный"},
+  {en:"to take into account",tr:"/tə teɪk ɪntə əˈkaʊnt/",ru:"принимать во внимание"}
+];
+
+const W=[...new Map(WORDS.map(w=>[w.en,w])).values()];
+let G={mode:null,queue:[],idx:0,ok:0,bad:0,sel:null,done:false,mtOff:0};
+
+const shuf=a=>[...a].sort(()=>Math.random()-.5);
+const pick=(ex,n)=>shuf(W.filter(w=>!ex.includes(w))).slice(0,n);
+const $=id=>document.getElementById(id);
+
+let bestAcc=parseInt(localStorage.getItem('ow_best')||'0');
+function updateBest(acc){if(acc>bestAcc){bestAcc=acc;localStorage.setItem('ow_best',acc);}$('hs-acc').textContent=bestAcc?bestAcc+'%':'—';}
+updateBest(0);
+
+// ── TTS ──
+let ttsVoice=null;
+function initTTS(){
+  const load=()=>{
+    const vs=speechSynthesis.getVoices();if(!vs.length)return;
+    const preferred=['Daniel','Samantha','Karen','Moira','Rishi','Tessa','Oliver','Martha','Aaron','Fred'];
+    ttsVoice=preferred.map(n=>vs.find(v=>v.name===n)).find(Boolean)||vs.find(v=>v.lang==='en-GB')||vs.find(v=>v.lang==='en-US')||vs.find(v=>v.lang.startsWith('en'))||null;
+  };
+  if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=load;
+  setTimeout(load,100);
+}
+function speakWord(text){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.88;u.pitch=1;
+  if(ttsVoice){u.voice=ttsVoice;u.lang=ttsVoice.lang;}
+  const btns=document.querySelectorAll('.speak-btn');
+  btns.forEach(b=>b.classList.add('speaking'));
+  u.onend=u.onerror=()=>btns.forEach(b=>b.classList.remove('speaking'));
+  speechSynthesis.speak(u);
+}
+function speakCurrent(){if(G.queue&&G.queue[G.idx])speakWord(G.queue[G.idx].en);}
+initTTS();
+
+// ── NAV ──
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('s-'+id).classList.add('active');}
+function goHome(){speechSynthesis.cancel();show('home');}
+function prog(id,i,n){$(id).style.width=n?(i/n*100)+'%':'0%';}
+
+// ── MODES ──
+function startMode(m){
+  G={mode:m,queue:shuf(W),idx:0,ok:0,bad:0,sel:null,done:false,mtOff:0};
+  if(m==='flashcard'){show('flashcard');rFC();}
+  else if(m==='multiple'){show('multiple');rMC();}
+  else if(m==='typing'){show('typing');rTP();}
+  else if(m==='reverse'){show('reverse');rRV();}
+  else if(m==='matching'){show('matching');rMT();}
+}
+
+function endGame(){
+  const t=G.ok+G.bad,acc=t?Math.round(G.ok/t*100):0;
+  updateBest(acc);
+  const em=['😅','💪','🌟','🏆'],tt=['Ещё поработай!','Неплохо!','Отлично!','Превосходно!'];
+  const i=acc<50?0:acc<75?1:acc<90?2:3;
+  $('re-em').textContent=em[i];$('re-t').textContent=tt[i];$('re-s').textContent='Режим: '+({flashcard:'Карточки',multiple:'Выбор ответа',typing:'Написать',reverse:'Угадай слово',matching:'Сопоставить'}[G.mode]||'');
+  $('re-ok').textContent=G.ok;$('re-bad').textContent=G.bad;$('re-total').textContent=t;
+  $('re-acc-ring').textContent=acc+'%';
+  show('results');
+  // animate ring
+  const circ=289;
+  setTimeout(()=>{$('ring-circle').style.strokeDashoffset=circ-(circ*acc/100);},80);
+  // ring color
+  const col=acc>=75?'var(--green)':acc>=50?'var(--gold)':'var(--red)';
+  $('ring-circle').style.stroke=col;$('re-acc-ring').style.color=col;
+  if(acc>=70)confetti(14);
+}
+function retry(){startMode(G.mode);}
+
+// ── FLASHCARD ──
+function rFC(){
+  if(G.idx>=G.queue.length){endGame();return;}
+  const w=G.queue[G.idx];
+  $('fc-en').textContent=w.en;$('fc-tr').textContent=w.tr;
+  $('fc-ru').textContent=w.ru;$('fc-en2').textContent=w.en;
+  $('fc-ctr').textContent=(G.idx+1)+'/'+G.queue.length;
+  $('fc-card').classList.remove('flipped');G.fcF=false;
+  prog('fc-p',G.idx,G.queue.length);
+  setTimeout(()=>speakWord(w.en),350);
+}
+function flipFC(){G.fcF=!G.fcF;$('fc-card').classList.toggle('flipped',G.fcF);}
+function fcAns(ok){ok?G.ok++:G.bad++;G.idx++;rFC();}
+
+// ── MULTIPLE ──
+function rMC(){
+  if(G.idx>=G.queue.length){endGame();return;}
+  const w=G.queue[G.idx];
+  $('mc-w').textContent=w.en;$('mc-t').textContent=w.tr;
+  $('mc-ctr').textContent=(G.idx+1)+'/'+G.queue.length;
+  prog('mc-p',G.idx,G.queue.length);
+  const g=$('mc-opts');g.innerHTML='';
+  shuf([w,...pick([w],3)]).forEach(o=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=o.ru;b.dataset.k=o.en;
+    b.onclick=()=>{if(G.done)return;mcSel(b,o.en===w.en);};g.appendChild(b);
+  });
+  $('mc-btn').textContent='Проверить';$('mc-btn').className='mbtn off';
+  $('mc-fb').className='fb';$('mc-fbsp').style.display='none';$('mc-fa').style.display='none';
+  G.sel=null;G.done=false;
+  setTimeout(()=>speakWord(w.en),350);
+}
+function mcSel(b,ok){document.querySelectorAll('#mc-opts .opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');G.sel=ok;$('mc-btn').className='mbtn prim';}
+function mcAct(){
+  if(G.done){G.idx++;rMC();return;}
+  if(G.sel===null)return;G.done=true;
+  const w=G.queue[G.idx];
+  document.querySelectorAll('#mc-opts .opt').forEach(b=>{b.disabled=true;if(b.dataset.k===w.en)b.classList.add('ok');else if(b.classList.contains('sel'))b.classList.add('bad');});
+  fbShow('mc',G.sel,w.ru,w.en);
+  G.sel?(G.ok++,confetti(5)):G.bad++;
+  $('mc-fbsp').style.display='inline-flex';
+  $('mc-btn').textContent='Дальше →';$('mc-btn').className='mbtn succ';
+}
+
+// ── TYPING ──
+function rTP(){
+  if(G.idx>=G.queue.length){endGame();return;}
+  const w=G.queue[G.idx];
+  $('tp-w').textContent=w.en;$('tp-t').textContent=w.tr;
+  $('tp-ctr').textContent=(G.idx+1)+'/'+G.queue.length;
+  prog('tp-p',G.idx,G.queue.length);
+  const inp=$('tp-in');inp.value='';inp.className='tp-inp';inp.disabled=false;
+  $('tp-btn').textContent='Проверить';$('tp-btn').className='mbtn off';
+  $('tp-fb').className='fb';$('tp-fbsp').style.display='none';$('tp-fa').style.display='none';
+  G.done=false;
+  setTimeout(()=>speakWord(w.en),350);
+  setTimeout(()=>{try{inp.focus();}catch(e){}},200);
+}
+function tpTyp(){$('tp-btn').className=$('tp-in').value.trim()?'mbtn prim':'mbtn off';}
+const norm=s=>s.toLowerCase().trim().replace(/ё/g,'е');
+function tpAct(){
+  if(G.done){G.idx++;rTP();return;}
+  const v=$('tp-in').value.trim();if(!v)return;G.done=true;
+  const w=G.queue[G.idx];
+  const ok=w.ru.split(/[\/=,]/).map(s=>norm(s.trim())).some(a=>norm(v)===a);
+  $('tp-in').className='tp-inp '+(ok?'ok':'bad');$('tp-in').disabled=true;
+  fbShow('tp',ok,w.ru,w.en);
+  ok?(G.ok++,confetti(5)):G.bad++;
+  $('tp-fbsp').style.display='inline-flex';
+  $('tp-btn').textContent='Дальше →';$('tp-btn').className='mbtn succ';
+}
+
+// ── REVERSE ──
+function rRV(){
+  if(G.idx>=G.queue.length){endGame();return;}
+  const w=G.queue[G.idx];
+  $('rv-w').textContent=w.ru;
+  $('rv-ctr').textContent=(G.idx+1)+'/'+G.queue.length;
+  prog('rv-p',G.idx,G.queue.length);
+  const g=$('rv-opts');g.innerHTML='';
+  shuf([w,...pick([w],3)]).forEach(o=>{
+    const b=document.createElement('button');b.className='opt';
+    b.innerHTML=`${o.en}<span style="display:block;font-family:'DM Mono',monospace;font-size:11px;color:var(--t2);font-weight:400;margin-top:3px;letter-spacing:.3px">${o.tr}</span>`;
+    b.dataset.k=o.en;b.onclick=()=>{if(G.done)return;rvSel(b,o.en===w.en);};g.appendChild(b);
+  });
+  $('rv-btn').textContent='Проверить';$('rv-btn').className='mbtn off';
+  $('rv-fb').className='fb';$('rv-fbsp').style.display='none';$('rv-fa').style.display='none';
+  G.sel=null;G.done=false;
+}
+function rvSel(b,ok){document.querySelectorAll('#rv-opts .opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');G.sel=ok;$('rv-btn').className='mbtn prim';}
+function rvAct(){
+  if(G.done){G.idx++;rRV();return;}
+  if(G.sel===null)return;G.done=true;
+  const w=G.queue[G.idx];
+  document.querySelectorAll('#rv-opts .opt').forEach(b=>{b.disabled=true;if(b.dataset.k===w.en)b.classList.add('ok');else if(b.classList.contains('sel'))b.classList.add('bad');});
+  fbShow('rv',G.sel,w.en,null);
+  speakWord(w.en);
+  G.sel?(G.ok++,confetti(5)):G.bad++;
+  $('rv-fbsp').style.display='inline-flex';
+  $('rv-btn').textContent='Дальше →';$('rv-btn').className='mbtn succ';
+}
+
+// ── MATCHING ──
+let mtPairs=[],mtMatched=[],mtSel=null;
+function rMT(){
+  const rem=W.length-G.mtOff;if(rem<=0){endGame();return;}
+  const n=Math.min(5,rem);
+  mtPairs=shuf(W).slice(0,n);mtMatched=[];mtSel=null;
+  $('mt-ctr').textContent=(G.mtOff+1)+'-'+(G.mtOff+n)+'/'+W.length;
+  prog('mt-p',G.mtOff,W.length);
+  const g=$('mt-grid');g.innerHTML='';
+  shuf([...mtPairs.map(w=>({t:w.en,k:w.en,tp:'en'})),...mtPairs.map(w=>({t:w.ru,k:w.en,tp:'ru'}))]).forEach(item=>{
+    const el=document.createElement('div');el.className='mi-item';el.textContent=item.t;
+    if(item.tp==='en')el.style.fontFamily="'Barlow Condensed',sans-serif";
+    el.dataset.k=item.k;el.dataset.tp=item.tp;el.onclick=()=>mtClick(el);g.appendChild(el);
+  });
+  $('mt-fb').className='fb';$('mt-btn').style.display='none';
+}
+function mtClick(el){
+  if(el.classList.contains('done'))return;
+  if(!mtSel){mtSel=el;el.classList.add('sel');
+    if(el.dataset.tp==='en')speakWord(el.textContent);
+    return;
+  }
+  if(mtSel===el){el.classList.remove('sel');mtSel=null;return;}
+  if(mtSel.dataset.k===el.dataset.k&&mtSel.dataset.tp!==el.dataset.tp){
+    const enEl=[mtSel,el].find(x=>x.dataset.tp==='en');
+    mtSel.classList.remove('sel');mtSel.classList.add('done');el.classList.add('done');
+    mtMatched.push(el.dataset.k);G.ok++;confetti(3);mtSel=null;
+    if(enEl)setTimeout(()=>speakWord(enEl.textContent),200);
+    if(mtMatched.length===mtPairs.length){
+      G.mtOff+=mtPairs.length;
+      setTimeout(()=>{
+        $('mt-fi').textContent='✅';$('mt-fm').className='fb-main ok';$('mt-fm').textContent='Раунд завершён!';
+        $('mt-fs').textContent='Все '+mtPairs.length+' пар найдены';$('mt-fb').className='fb ok';$('mt-btn').style.display='block';
+      },400);
+    }
+  } else {
+    const a=mtSel,b=el;a.classList.remove('sel');a.classList.add('err');b.classList.add('err');
+    G.bad++;setTimeout(()=>{a.classList.remove('err');b.classList.remove('err');},400);mtSel=null;
+  }
+}
+function mtNext(){$('mt-btn').style.display='none';$('mt-fb').className='fb';rMT();}
+
+// ── FEEDBACK ──
+function fbShow(p,ok,ans,extra){
+  $(p+'-fi').textContent=ok?'✅':'❌';
+  const m=$(p+'-fm');m.className='fb-main '+(ok?'ok':'bad');
+  m.textContent=ok?['Правильно!','Отлично!','Верно!','Супер!'][~~(Math.random()*4)]:'Неверно';
+  if(!ok&&ans){
+    const fa=$(p+'-fa');
+    fa.textContent='Правильно: '+ans;fa.style.display='block';
+    $(p+'-fs').textContent='Попробуй запомнить это слово';
+  } else {
+    $(p+'-fs').textContent='';
+    if($(p+'-fa'))$(p+'-fa').style.display='none';
+  }
+  $(p+'-fb').className='fb '+(ok?'ok':'bad');
+}
+
+// ── WORD LIST ──
+function showWL(){show('wordlist');wlRender(W);}
+function wlRender(words){
+  $('wl-count').textContent=words.length;
+  $('wl-list').innerHTML=words.map(w=>`
+    <div class="wl-item">
+      <div class="wl-left">
+        <div class="wl-en">${w.en}</div>
+        <div class="wl-tr">${w.tr}</div>
+      </div>
+      <button class="wl-sp" onclick="speakWord('${w.en.replace(/'/g,"\\'")}')">🔊</button>
+      <div class="wl-div"></div>
+      <div class="wl-ru">${w.ru}</div>
+    </div>`).join('');
+}
+function filterWL(q){const lq=q.toLowerCase();wlRender(W.filter(w=>w.en.toLowerCase().includes(lq)||w.ru.toLowerCase().includes(lq)));}
+
+// ── CONFETTI ──
+function confetti(n){
+  const c=$('cw');
+  const cols=['#E8981E','#22C55E','#3B82F6','#F43F5E','#A855F7','#F59E0B'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');el.className='cp';
+    const size=6+Math.random()*7;
+    el.style.cssText=`left:${10+Math.random()*80}vw;background:${cols[~~(Math.random()*cols.length)]};width:${size}px;height:${size}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${.9+Math.random()*.9}s;animation-delay:${Math.random()*.15}s`;
+    c.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>
