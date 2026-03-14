@@ -1,0 +1,373 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A774AE1FD9CA471DBC602684 /* OilWordsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B739C46DDA374F39AD1B340F /* OilWordsApp.swift */; };
+		E537EF365194459985EB72D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DFCCBB3E8D4BE68BFED621 /* ContentView.swift */; };
+		31A5630FAC1C46D9B491CF73 /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAFA747D50F4CB78FBA8F2C /* Word.swift */; };
+		089F2095CD6E4FFAA753A2DE /* WordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32996E58B593435BA860E0DC /* WordStore.swift */; };
+		DF40C4349DD844F39B0BF032 /* WordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA703F30AE0E402B9B4D94F7 /* WordListView.swift */; };
+		EEB94B33EFB64AD588B3A228 /* AddWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4537A1E3F64643F39F5A10B8 /* AddWordView.swift */; };
+		294B628EC3254E869DD74AA5 /* FlashcardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6111F3369FA642059C92FD4A /* FlashcardView.swift */; };
+		4EF79A2FA6594CCBB9D21171 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C35CFB65C104D35ABB16564 /* QuizView.swift */; };
+		CA54BFF214D14095AB638764 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB894E74381645299F9B411E /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DC2F63E6A35B4C5F970E1C87 /* OilWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OilWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B739C46DDA374F39AD1B340F /* OilWordsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilWordsApp.swift; sourceTree = "<group>"; };
+		58DFCCBB3E8D4BE68BFED621 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8EAFA747D50F4CB78FBA8F2C /* Word.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
+		32996E58B593435BA860E0DC /* WordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordStore.swift; sourceTree = "<group>"; };
+		CA703F30AE0E402B9B4D94F7 /* WordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListView.swift; sourceTree = "<group>"; };
+		4537A1E3F64643F39F5A10B8 /* AddWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWordView.swift; sourceTree = "<group>"; };
+		6111F3369FA642059C92FD4A /* FlashcardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardView.swift; sourceTree = "<group>"; };
+		9C35CFB65C104D35ABB16564 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		BB894E74381645299F9B411E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		70912477C027431B81D71C04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8B0806DACCBE426784FDCC78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D93F21379B6A47B99FFB0DFF = {
+			isa = PBXGroup;
+			children = (
+				538C90DCE03F42AE9B4C9AE4 /* OilWords */,
+				015278829E8D4407B665A049 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		015278829E8D4407B665A049 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DC2F63E6A35B4C5F970E1C87 /* OilWords.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		538C90DCE03F42AE9B4C9AE4 /* OilWords */ = {
+			isa = PBXGroup;
+			children = (
+				B739C46DDA374F39AD1B340F /* OilWordsApp.swift */,
+				58DFCCBB3E8D4BE68BFED621 /* ContentView.swift */,
+				588202378DF34A8F87F77CA3 /* Models */,
+				23912575194C472EAA0DC0E9 /* Views */,
+				BB894E74381645299F9B411E /* Assets.xcassets */,
+				70912477C027431B81D71C04 /* Info.plist */,
+			);
+			path = OilWords;
+			sourceTree = "<group>";
+		};
+		588202378DF34A8F87F77CA3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8EAFA747D50F4CB78FBA8F2C /* Word.swift */,
+				32996E58B593435BA860E0DC /* WordStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		23912575194C472EAA0DC0E9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CA703F30AE0E402B9B4D94F7 /* WordListView.swift */,
+				4537A1E3F64643F39F5A10B8 /* AddWordView.swift */,
+				6111F3369FA642059C92FD4A /* FlashcardView.swift */,
+				9C35CFB65C104D35ABB16564 /* QuizView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CB143723E79A46A48A4081FE /* OilWords */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1D44D8080EB46A1803E07B9 /* Build configuration list for PBXNativeTarget "OilWords" */;
+			buildPhases = (
+				001C5DA5CCE74E7EA59DCE06 /* Sources */,
+				8B0806DACCBE426784FDCC78 /* Frameworks */,
+				826E291F58454F80B235AF17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OilWords;
+			productName = OilWords;
+			productReference = DC2F63E6A35B4C5F970E1C87 /* OilWords.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ADEC4468DF0349C796FBC824 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CB143723E79A46A48A4081FE = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 1EFD34EBDAE4494BB1F816EA /* Build configuration list for PBXProject "OilWords" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D93F21379B6A47B99FFB0DFF;
+			productRefGroup = 015278829E8D4407B665A049 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB143723E79A46A48A4081FE /* OilWords */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		826E291F58454F80B235AF17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA54BFF214D14095AB638764 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		001C5DA5CCE74E7EA59DCE06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A774AE1FD9CA471DBC602684 /* OilWordsApp.swift in Sources */,
+				E537EF365194459985EB72D7 /* ContentView.swift in Sources */,
+				31A5630FAC1C46D9B491CF73 /* Word.swift in Sources */,
+				089F2095CD6E4FFAA753A2DE /* WordStore.swift in Sources */,
+				DF40C4349DD844F39B0BF032 /* WordListView.swift in Sources */,
+				EEB94B33EFB64AD588B3A228 /* AddWordView.swift in Sources */,
+				294B628EC3254E869DD74AA5 /* FlashcardView.swift in Sources */,
+				4EF79A2FA6594CCBB9D21171 /* QuizView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		59B6D6666B9941B9B08BA66B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D653BF63B32C492BB17E0264 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		59B6D6666B9941B9B08BA66C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OilWords/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oilwords.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D653BF63B32C492BB17E0265 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OilWords/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oilwords.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1EFD34EBDAE4494BB1F816EA /* Build configuration list for PBXProject "OilWords" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59B6D6666B9941B9B08BA66B /* Debug */,
+				D653BF63B32C492BB17E0264 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1D44D8080EB46A1803E07B9 /* Build configuration list for PBXNativeTarget "OilWords" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59B6D6666B9941B9B08BA66C /* Debug */,
+				D653BF63B32C492BB17E0265 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = ADEC4468DF0349C796FBC824 /* Project object */;
+}
